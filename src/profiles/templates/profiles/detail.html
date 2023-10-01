@@ -1,0 +1,68 @@
+{% extends 'base.html'%}
+
+{% block title%}
+Profile Detail
+{% endblock%}
+
+{%block content%}
+<div class = "card m-2 p-2 bg-light">
+    <div class = "row p-2">
+        <div class="col-md-4 col-lg-3">
+            <img class="img bg-info rounded" style="width:200px" src="{{object.avatar.url}}"/>
+            <h1>{{object.user}}</h1>
+            <div class="list-group" style="width:200px">
+                <li class="list-group-item">
+                    Posts<div class="badge bg-secondary float-end">{{object.get_posts_no}}</div>
+                </li>
+                <li class="list-group-item">
+                    Likes Given<div class="badge bg-secondary float-end">{{object.get_likes_given_no}}</div>
+                </li>
+                <li class="list-group-item">
+                    Likes Received<div class="badge bg-secondary float-end">{{object.get_likes_received_no}}</div>
+                </li>
+                <li class="list-group-item">
+                    Number of Friends<div class="badge bg-secondary float-end">{{object.get_friends_no}}</div>
+                </li>
+                    <!-- Add to friends -->
+                    {% if object.user not in rel_receiver and object.user not in rel_sender and object.user != request.user %}
+                    <form action="{% url 'profiles:send-invite' %}" method="POST" class="my-2">
+                        {%csrf_token%}
+                        <input type="hidden" name="profile_pk" value="{{object.pk}}">
+                        <button type="submit" class="btn btn-outline-success bwidth-xxxl"><i class="bi bi-plus-square"></i>&nbsp;&nbsp;Add to friends&nbsp;&nbsp;</button>
+                    </form>
+                    {% endif %}
+
+                    <!-- Waiting for approval -->
+                    {% if object.user in rel_receiver and request.user not in object.friends.all  %}
+                        <div class="my-2">
+                        <button class = "btn btn-outline-secondary bwidth-xxxl" disabled><i class="bi bi-hourglass-split"></i>&nbsp;Waiting approval&nbsp;</button>
+                        </div>
+                    {% endif %}
+
+                    <!-- Revmove from friends -->
+                    {% if request.user in object.friends.all %}
+                    <form action="{% url 'profiles:remove-friend'%}" method="POST" class="my-2">
+                        {%csrf_token%}
+                        <input type="hidden" name="profile_pk" value={{object.pk}}>
+                        <button type="submit" class="btn btn-outline-danger bwidth-xxxl"><i class="bi bi-dash-square"></i>&nbsp;&nbsp;Remove friend&nbsp;&nbsp;</button>
+                    </form>
+                    {% endif %}
+
+            </div>
+        </div>
+        <div class="col-md-8 col-lg-9 my-2">
+            <div >
+            <h4><i class="bi bi-chat-left-dots"></i>&nbsp;&nbsp;Post List</h4>
+            {% if len_posts %}
+                {% for post in posts %}
+                    <div class = "card my-2 p-2">
+                    {{ post.content }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            </div>
+        </div> 
+    </div>
+</div>
+
+{%endblock%}

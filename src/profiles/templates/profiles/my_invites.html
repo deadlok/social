@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}
+My invites
+{% endblock %}
+
+{% block content %}
+
+    {% if is_empty %}
+        <h1>You have no invitation</h1>
+    {% endif %}
+
+    {% for obj in qs %}
+        <div class="card m-2">
+            <div class="row p-2 m-2">
+                <div class = "col-md-3 p-2">
+                    <img class="img bg-info rounded-circle" style="width:130px" src={{obj.avatar.url}}/>
+                </div>
+                <div class = "col-md-9">
+                    <h3>{{obj.user}}</h3>
+                    <p>{{obj.bio}}</p>
+
+                    <!-- View Profile -->
+                    <a href="{{obj.get_absolute_url}}">
+                    <button class="btn btn-primary btn-sm bwidth-xxl"><i class="bi bi-person-fill"></i>&nbsp;&nbsp;&nbspView profile&nbsp;&nbsp;&nbsp</button>
+                    </a>
+                    
+                    <!-- Approve -->
+                    <div>
+                    <div class="float-start me-2">
+                    <form action="{% url 'profiles:accept-invite' %}" method="POST" class="my-2">
+                        {%csrf_token%}
+                        <input type="hidden" name="profile_pk" value={{obj.pk}}>
+                        <button type="submit" class="btn btn-outline-success btn-sm bwidth-xxl"><i class="bi bi-check-square"></i>&nbsp;&nbsp;Accept Invite&nbsp;&nbsp;</button>
+                    </form>
+                    </div>
+                    
+                    <!-- Reject -->
+                    <div class="float-start">
+                    <form action="{% url 'profiles:reject-invite'%}" method="POST" class="my-2">
+                        {%csrf_token%}
+                        <input type="hidden" name="profile_pk" value={{obj.pk}}>
+                        <button type="submit" class="btn btn-outline-danger btn-sm bwidth-xxl"><i class="bi bi-x-square"></i>&nbsp;&nbsp;Reject Invite&nbsp;&nbsp;</button>
+                    </form>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+{% endblock %}
+

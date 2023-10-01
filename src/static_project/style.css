@@ -1,0 +1,51 @@
+body {
+    background: #F8F8F8 !important;
+}
+
+.navbar {
+    border-radius: 0px !important;
+    padding: 10px 0 10px 0 !important;
+    /* background-color: #396afc !important; */ 
+}
+
+.img-profile-max {
+    max-width: 200px !important;
+}
+
+.bwhite-lg {
+    background-color: rgba(0,0,0,.07) !important;
+    color: black !important;
+    width: 100px !important;
+}
+
+.bwhite-xl {
+    background-color: rgba(0,0,0,.07) !important;
+    color: black !important;
+    width: 150px !important;
+}
+
+.bwhite-sm {
+    background-color: rgba(0,0,0,.07) !important;
+    color: black !important;
+    width: 40px !important;
+}
+
+.bwidth-lg {
+    width: 100px !important;
+}
+
+.bwidth-xl {
+    width: 150px !important;
+}
+
+.bwidth-xxl {
+    width: 160px !important;
+}
+
+.bwidth-xxxl {
+    width: 200px !important;
+}
+
+.like-icon-active {
+    background-color: lightblue !important;
+}

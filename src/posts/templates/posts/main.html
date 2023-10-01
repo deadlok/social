@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+<!-- 
+'qs' : qs,         -- all post
+'profile': profile -- user profile 
+-->
+{% load crispy_forms_tags %}
+
+{% block header%}
+
+{% endblock header %}
+
+{% block content%}
+<div class="row">
+    <div class="col-lg-6">
+        {% for obj in qs %}
+        <div class="fluid card my-3 bg-light p-2">
+            <div class="p-2 mb-2">
+                <div class="float-end">
+                    <!-- Update post -->
+                    {% if request.user == obj.author.user %}
+                    <a href="{% url 'posts:post-update' obj.pk %}">
+                    <button class="btn btn-sm bwhite-lg rounded">Update</button></a>
+                    &nbsp;
+                    <a href="{% url 'posts:post-delete' obj.pk %}">
+                    <button class="btn btn-sm bwhite-lg rounded">Delete</button></a>
+                    {% endif %}
+                </div>
+                <img class="img bg-info rounded-circle" style="width:30px" src={{obj.author.avatar.url}}> 
+                &nbsp;&nbsp;{{ obj.author.user }} - {{ obj.created|timesince}} ago
+            </div>
+            <div class="card mx-2 p-2" style="background:white;">
+                <p>{{obj.content}}</p>
+            </div>
+            <div class="mx-2 my-0 px-2">
+                <!-- Likes -->
+                <div class="float-end my-1">
+                <form action="{% url 'posts:like_post_view' %}" method="POST">
+                    {%csrf_token%}
+                    <input type="hidden" name="post_id" value="{{obj.id}}"/>
+                        {% if profile not in obj.liked.all %}
+                            <button type="submit" class="btn bwhite-sm rounded-pill px-0">
+                            <i class="bi bi-hand-thumbs-up h5"></i>
+                            </button>
+                        {% else %}
+                            <button type="submit" class="btn bwhite-sm rounded-pill px-0 like-icon-active">
+                            <i class="bi bi-hand-thumbs-up h5"></i>
+                            </button>
+                        {% endif %} 
+                    
+                    <span>&nbsp;{{ obj.num_likes }} like(s)</span>
+                </form>
+                </div>
+                <i class="bi bi-chat-dots"></i> &nbsp; {{ obj.num_comments }} comment(s)
+            </div>
+            <!-- Show/Hide Comments Button -->
+            <div class="content px-2 my-2">
+                <button class="btn btn-sm bwhite-xl" data-bs-toggle="collapse" data-bs-target="#csection_{{ obj.id }}" name="cmdBtn">Show Comment(s)</button>
+            </div>
+            <!-- Collapsible Comments -->
+            <div class="collapse" id ="csection_{{ obj.id }}">
+                {% if obj.comment_set.all %}
+                    {% for c in obj.comment_set.all %}
+                        <div class="card m-2 p-1 bg-light">
+                            <div class="p-2">
+                            <img src="{{c.user.avatar.url}}" class="img bg-info rounded-circle" style="width:25px"/>
+                            {{ c.user.user }} - {{ c.created|timesince}} ago
+                            </div>
+                            <div class="px-2">{{c.body}}</div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <!-- Update Comments -->
+                <div class="px-2 my-2 py-0">
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    {{ c_form | crispy }}
+                    <input type="hidden" name="post_id" value="{{obj.id}}"/>
+                    <button type="submit" name="submit_c_form" class="btn btn-primary bwidth-xl px-4 py-1">Send</button> 
+                </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <!-- New Post Section -->
+    <div class="col-lg-6 my-3">
+        {% if post_added %}
+        <div class="alert alert-success">Post Added</div>
+        {% endif %}
+        <h4 class="text-primary">New Post</h4>
+        <form action="" method="POST" enctype="multipart/form-data" class="my-3">
+        {% csrf_token %}
+        {{ p_form | crispy }}
+        
+        <button type="submit" name="submit_p_form" class="btn btn-primary bwidth-xl">Send Post</button> 
+        </form>
+    </div>
+</div>
+{% endblock content %}
+
+
+{% block scripts %}
+<script>
+    function toggleCommentBtn() {
+        let btns = document.getElementsByName("cmdBtn")
+
+        btns.forEach((btn)=>{
+            btn.addEventListener("click", () => {
+
+                if (btn.innerHTML == "Show Comment(s)") {
+                    btn.innerHTML = "Hide Comment(s)"
+                } else if (btn.innerHTML == "Hide Comment(s)") { 
+                    btn.innerHTML = "Show Comment(s)"
+                } else {
+                    null
+                }
+            })
+        })
+    }
+    toggleCommentBtn()
+</script>
+{% endblock scripts %}
