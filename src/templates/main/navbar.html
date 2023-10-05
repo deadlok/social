@@ -20,7 +20,7 @@
     <ul class="navbar-nav mr-auto pt-7">
         {% if request.user.is_authenticated %}
         <li class="nav-item  px-3">
-            <a href="{{path_to_posts}}" class="{% if request.path == path_to_posts %}active{% endif %} nav-link">
+            <a href="{{path_to_posts}}" class="nav-link {% if request.path == path_to_posts %}active{% endif %}">
             Board
             </a>
         </li>
@@ -40,7 +40,7 @@
                         Send Invites
                     </a></li>
                     <li><a href="{{path_to_my_invites}}" class="{% if request.path == path_to_my_invites %}active{% endif %} dropdown-item">
-                        Received Invites &nbsp; <div class="bg-primary">{{invites_num}}</div>
+                        <span class="d-flex inline">Received Invites<div class="bg-danger text-white rounded mx-2 px-3">{{invites_num}}</div><span>
                     </a></li>
                 </ul>
             </div>
@@ -58,25 +58,24 @@
                     <button type='submit' class="btn btn-sm">Search</button>
                 </span>
                 </div>
-            </form>
-            
+            </form>         
         </li>
         <li class="nav-item px-3" >
             <a href="{{path_to_my_profile}}" class="{% if request.path == path_to_my_profile %}active{% endif %} nav-link">
                 <div class="flow-inline">
-                <img src="{{request.user.profile.avatar.url}}" class="img bg-info rounded-circle" style="width:30px"/>
+                <img src="{{picture.url}}" class="img bg-info rounded-circle" style="width:30px"/>
                 {{ request.user }}
                 </div> 
             </a>
         </li>
         <li class="nav-item px-3" >
-            <a href="/admin/logout/" class="nav-link">
+            <a href="/accounts/logout/" class="nav-link">
                 Logout
             </a>
         </li>
         {% else %}
         <li class="nav-item px-3">
-        <a href="/admin/login/" class="nav-link">
+        <a href="/accounts/login/" class="nav-link">
                 Login
             </a>
         </li>

@@ -34,21 +34,23 @@
             <div class="mx-2 my-0 px-2">
                 <!-- Likes -->
                 <div class="float-end my-1">
-                <form action="{% url 'posts:like_post_view' %}" method="POST">
-                    {%csrf_token%}
-                    <input type="hidden" name="post_id" value="{{obj.id}}"/>
+                <!--<form action="{% url 'posts:like_post_view' %}" method="POST">-->
+                <!--    {%csrf_token%} -->
+                <!--    <input type="hidden" name="post_id" value="{{obj.id}}"/>-->
                         {% if profile not in obj.liked.all %}
-                            <button type="submit" class="btn bwhite-sm rounded-pill px-0">
+                            <button type="submit" class="btn bwhite-sm rounded-pill px-0 like-inactive" 
+                             name="btn-like" id="likeBtn_{{obj.id}}" onClick="likePost({{obj.id}})">
                             <i class="bi bi-hand-thumbs-up h5"></i>
                             </button>
                         {% else %}
-                            <button type="submit" class="btn bwhite-sm rounded-pill px-0 like-icon-active">
+                            <button type="submit" class="btn bwhite-sm rounded-pill px-0 like-active" 
+                            name="btn-like" id="likeBtn_{{obj.id}}" onClick="likePost({{obj.id}})">
                             <i class="bi bi-hand-thumbs-up h5"></i>
                             </button>
                         {% endif %} 
                     
-                    <span>&nbsp;{{ obj.num_likes }} like(s)</span>
-                </form>
+                    <span class="inline">&nbsp;<span class="like-count" id="likeCnt_{{obj.id}}">{{ obj.num_likes }}</span>&nbsp;like(s)</span>
+                <!--</form>-->
                 </div>
                 <i class="bi bi-chat-dots"></i> &nbsp; {{ obj.num_comments }} comment(s)
             </div>
@@ -120,4 +122,60 @@
     }
     toggleCommentBtn()
 </script>
+
+<script>
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    function likePost(id){
+
+        const csrftoken = getCookie('csrftoken');
+
+        const body = {'post_id': id,}
+
+        fetch('{% url "posts:like_post_view"%}',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                    'X-CSRFToken': csrftoken
+                },
+                body: JSON.stringify(body)
+            }
+            ).then((response)=>{
+            return response.json()
+        }).then((data) => {
+            // Update no of likes and icon
+            console.log(data)
+            
+            btn = document.getElementById("likeBtn_"+id)
+            cnt = document.getElementById("likeCnt_"+id)
+            //console.log(btn.innerHTML)
+            //console.log(cnt.innerHTML)
+            
+            cnt.innerHTML = data.likeTotal
+
+            if (data.likeValue == 'Like'){
+                btn.classList.replace('like-inactive','like-active')
+            } else {
+                btn.classList.replace('like-active','like-inactive')
+            }
+
+        })
+    }
+</script>
 {% endblock scripts %}
+

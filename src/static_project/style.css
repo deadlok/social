@@ -27,7 +27,7 @@ body {
 .bwhite-sm {
     background-color: rgba(0,0,0,.07) !important;
     color: black !important;
-    width: 40px !important;
+    width:40px !important;
 }
 
 .bwidth-lg {
@@ -46,6 +46,10 @@ body {
     width: 200px !important;
 }
 
-.like-icon-active {
-    background-color: lightblue !important;
+.like-active {
+    background-color: yellow !important;
+}
+
+.like-inactive {
+    color: white !important;
 }
