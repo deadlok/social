@@ -76,6 +76,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'profiles.context_processors.profile_pic',
                 'profiles.context_processors.invitation_received_no',
+                'profiles.context_processors.invitation_send_no',
             ],
         },
     },
@@ -153,6 +154,15 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 #LOGIN_URL = '/admin/'
 LOGIN_REDIRECT_URL = '/posts'
+
+#ALLAUTH
+ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_UNIQUE = True
+#ACCOUNT_EMAIL_VERIFICATION_MANDATORY = True
+
+if DEBUG:
+    EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',

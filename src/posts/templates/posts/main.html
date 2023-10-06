@@ -20,7 +20,7 @@
                     {% if request.user == obj.author.user %}
                     <a href="{% url 'posts:post-update' obj.pk %}">
                     <button class="btn btn-sm bwhite-lg rounded">Update</button></a>
-                    &nbsp;
+                    
                     <a href="{% url 'posts:post-delete' obj.pk %}">
                     <button class="btn btn-sm bwhite-lg rounded">Delete</button></a>
                     {% endif %}
