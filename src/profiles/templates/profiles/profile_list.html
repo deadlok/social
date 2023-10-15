@@ -8,6 +8,10 @@ all profiles
 
     {% if is_empty %}
         <h1>No profiles available</h1>
+    {% else %}
+        <div container m-2 p-2>
+        <h1 class="m-3">All Profiles</h1>
+        </div>
     {% endif %}
 
     {% for obj in object_list %}
@@ -16,8 +20,12 @@ all profiles
                 <div class = "col-md-3 p-2">
                     <img class="img bg-info rounded-circle" style="width:130px" src={{obj.avatar.url}}/>
                 </div>
-                <div class = "col-md-9">
-                    <h3>{{obj.user}}</h3>
+                <div class = "col-md-9 ">
+                    <h3>{% if obj.first_name or obj.last_name %}
+                    <div class="d-inline rounded bg-success text-white px-3 py-1 me-3">{{obj.user.username}}</div>{{obj.first_name}} {{obj.last_name}} 
+                    {%else%}
+                    <div class="d-inline rounded bg-success text-white px-3 py-1">{{obj.user.username}}</div>
+                    {% endif %}</h3>
                     <p>{{obj.bio}}</p>
 
                     <!-- View Profile -->

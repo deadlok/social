@@ -26,9 +26,12 @@
                     {% endif %}
                 </div>
                 <img class="img bg-info rounded-circle" style="width:30px" src={{obj.author.avatar.url}}> 
-                &nbsp;&nbsp;{{ obj.author.user }} - {{ obj.created|timesince}} ago
+                &nbsp;&nbsp;{{ obj.author.display_name }} - {{ obj.created|timesince}} ago
             </div>
             <div class="card mx-2 p-2" style="background:white;">
+                {% if obj.image %}
+                <img class="img" src="{{obj.image.url}}">
+                {% endif %}
                 <p>{{obj.content}}</p>
             </div>
             <div class="mx-2 my-0 px-2">

@@ -19,7 +19,7 @@ def my_profile_view(request):
 
     if request.method == "POST":
         if form.is_valid():
-            form.save
+            form.save()
             confirm = True
 
     context = {
@@ -69,12 +69,29 @@ def reject_invitation(request):
     return redirect(request.META.get('HTTP_REFERER'))
 
 @login_required
+def cancel_invitation(request):
+    if request.method=="POST":
+        pk = request.POST.get("profile_pk")
+        sender = Profile.objects.get(user=request.user)
+        receiver = Profile.objects.get(pk=pk)
+        rs = get_object_or_404(Relationship, sender=sender, receiver=receiver)
+        rs.delete()
+    return redirect(request.META.get('HTTP_REFERER'))
+
+@login_required
 def invite_profiles_list_view(request):
-    user = request.user
-    qs = Profile.objects.get_all_profiles_to_invite(user)
-    # print("invite_profiles_list_view")
+    profile =  Profile.objects.get(user=request.user)
+    qs = Relationship.objects.invitations_send(profile)
+    # print("invites_send_view")
     # print(qs)
-    context = {'qs':qs,}
+    results = list(map(lambda x: x.receiver, qs))
+    is_empty=False
+
+    if len(results) == 0:
+        is_empty=True
+    context = {'qs':results,
+               'is_empty':is_empty,
+            }
 
     return render(request, 'profiles/to_invite_list.html', context)
 
@@ -116,7 +133,14 @@ class ProfileListView(LoginRequiredMixin, ListView):
     #context_object_name = 'qs'
 
     def get_queryset(self):
-        qs = Profile.objects.get_all_profiles(self.request.user)
+        q = self.request.GET.get('q')
+        print(f"searchstr = {q}")
+ 
+        if q:
+            qs = Profile.objects.get_all_profiles(self.request.user).filter(Q(first_name__contains=q)|Q(last_name__contains=q)|Q(user__username__contains=q))
+        else:
+            qs = Profile.objects.get_all_profiles(self.request.user)
+        
         return qs
 
     def get_context_data(self, **kwargs):

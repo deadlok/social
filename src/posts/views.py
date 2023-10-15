@@ -93,12 +93,12 @@ def like_unlike_post(request):
         print(data)
         return JsonResponse(data)
     
-    return redirect('posts:main_post_view')
+    return redirect('posts:main-post-view')
 
 class PostDeleteView(LoginRequiredMixin,DeleteView):
     model = Post
     template_name = 'posts/confirm_del.html'
-    success_url = reverse_lazy('posts:main_post_view')
+    success_url = reverse_lazy('posts:main-post-view')
 
     def get_object(self, *args, **kwargs):
         pk = self.kwargs.get('pk')
@@ -111,7 +111,7 @@ class PostUpdateView(LoginRequiredMixin, UpdateView):
     model = Post
     form_class = PostModelForm
     template_name = 'posts/update.html'
-    success_url = reverse_lazy('posts:main_post_view')
+    success_url = reverse_lazy('posts:main-post-view')
 
     def form_valid(self, form):
         profile = Profile.objects.get(user = self.request.user)

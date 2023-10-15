@@ -1,13 +1,17 @@
 {% extends 'base.html' %}
 
 {% block title %}
-My invites
+Invites Received
 {% endblock %}
 
 {% block content %}
 
     {% if is_empty %}
-        <h1>You have no invitation</h1>
+        <h1 class="m3" >You have no invitation received</h1>
+    {% else %}
+        <div container m-2 p-2>
+        <h1 class="m-3">Invitation Received</h1>
+        </div>
     {% endif %}
 
     {% for obj in qs %}
@@ -17,7 +21,11 @@ My invites
                     <img class="img bg-info rounded-circle" style="width:130px" src={{obj.avatar.url}}/>
                 </div>
                 <div class = "col-md-9">
-                    <h3>{{obj.user}}</h3>
+                    <h3>{% if obj.first_name or obj.last_name %}
+                    <div class="d-inline rounded bg-success text-white px-3 py-1 me-3">{{obj.user.username}}</div>{{obj.first_name}} {{obj.last_name}} 
+                    {%else%}
+                    <div class="d-inline rounded bg-success text-white px-3 py-1">{{obj.user.username}}</div>
+                    {% endif %}</h3>
                     <p>{{obj.bio}}</p>
 
                     <!-- View Profile -->

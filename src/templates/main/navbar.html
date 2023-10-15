@@ -39,17 +39,17 @@
                         All Profiles
                     </a></li>
                     <li><a href="{{path_to_invites}}" class="{% if request.path == path_to_invites %}active{% endif %} dropdown-item">
-                        <span class="d-flex inline">Invites Send&nbsp;<div class="bg-danger text-white rounded ms-5 px-3">{{send_num}}</div><span>
+                        <span class="d-flex inline">Invitation Send&nbsp;<div class="bg-danger text-white rounded ms-5 px-3">{{send_num}}</div><span>
                     </a></li>
                     <li><a href="{{path_to_my_invites}}" class="{% if request.path == path_to_my_invites %}active{% endif %} dropdown-item">
-                        <span class="d-flex inline">Invites Received<div class="bg-danger text-white rounded ms-4 px-3">{{invites_num}}</div><span>
+                        <span class="d-flex inline">Invitation Received<div class="bg-danger text-white rounded ms-4 px-3">{{invites_num}}</div><span>
                     </a></li>
                 </ul>
             </div>
         </li>
 
         <li class="nav-item px-2">
-            <form action="" method="GET">
+            <form action="/profiles/all-profiles" method="GET">
                 <div class="input-group">
 
                 <span class="input-group-text bg-light">
@@ -68,21 +68,21 @@
         <ul class="navbar-nav ms-auto pt-7">
         <li class="nav-item px-2" >
             <a href="{{path_to_my_profile}}" class="{% if request.path == path_to_my_profile %}active{% endif %} nav-link">
-                <img src="{{picture.url}}" class="img bg-info rounded-circle" style="width:30px"/>
+                <img src="{{picture.url}}" class="img bg-info rounded-circle" style="width:35px;"/>
                 {{ request.user }}
             </a>
         </li>
-        <li class="nav-item px-2" >
+        <li class="nav-item px-2 pt-1" >
             <a href="/accounts/logout/" class="nav-link">
                 Logout
             </a>
         </li>
-    </ul>
+        </ul>
     </div>
     {% else %}
         <ul class="navbar-nav ms-auto pt-7">
             <li class="nav-item px-2">
-            <a href="/accounts/login/" class="nav-link me-aut">
+            <a href="/accounts/login/" class="nav-link">
                     Login
             </a>
             </li>

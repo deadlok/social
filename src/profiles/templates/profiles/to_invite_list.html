@@ -1,14 +1,51 @@
 {% extends 'base.html' %}
 
 {% block title %}
-To Invites List
+Invites Send
 {% endblock %}
 
 {% block content %}
-<ul>
-{% for item in qs %}
-    <li>{{item}}</li>
-{% endfor %}
-</ul>
+    
+    {% if is_empty %}
+        <h1 class="m-3">You have no invitation</h1>
+    {% else %}
+        <div container m-2 p-2>
+        <h1 class="m-3">Invitation Send</h1>
+        </div>
+    {% endif %}
+
+    {% for obj in qs %}
+        <div class="card m-2">
+            <div class="row p-2 m-2">
+                <div class = "col-md-3 p-2">
+                    <img class="img bg-info rounded-circle" style="width:130px" src={{obj.avatar.url}}/>
+                </div>
+                <div class = "col-md-9">
+                    <h3>{% if obj.first_name or obj.last_name %}
+                    <div class="d-inline rounded bg-success text-white px-3 py-1 me-3">{{obj.user.username}}</div>{{obj.first_name}} {{obj.last_name}} 
+                    {%else%}
+                    <div class="d-inline rounded bg-success text-white px-3 py-1">{{obj.user.username}}</div>
+                    {% endif %}</h3>
+
+                    <p>{{obj.bio}}</p>
+
+                    <!-- View Profile -->
+                    <a href="{{obj.get_absolute_url}}">
+                    <button class="btn btn-primary btn-sm bwidth-xxl"><i class="bi bi-person-fill"></i>&nbsp;&nbsp;&nbspView profile&nbsp;&nbsp;&nbsp</button>
+                    </a>
+                    
+                    <!-- Cancelled -->
+                    <div>
+                    <form action="{% url 'profiles:cancel-invite'%}" method="POST" class="my-2">
+                        {%csrf_token%}
+                        <input type="hidden" name="profile_pk" value={{obj.pk}}>
+                        <button type="submit" class="btn btn-outline-danger btn-sm bwidth-xxl"><i class="bi bi-x-square"></i>&nbsp;&nbsp;Cancel Invitation&nbsp;&nbsp;</button>
+                    </form>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
 {% endblock %}
 

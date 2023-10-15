@@ -102,6 +102,12 @@ class Profile (models.Model):
         
         return total_liked
 
+    def display_name(self):
+        if self.first_name or self.last_name:
+                return self.first_name + " " + self.last_name
+        else:
+            return self.user.username
+
     def __str__(self):
         return f"{self.user.username}-{self.created.strftime('%d-%m-%Y')}"
 

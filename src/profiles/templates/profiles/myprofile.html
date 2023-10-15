@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags%} 
 
 {% block title %}
 My Profile
@@ -16,13 +17,13 @@ My Profile
         </div>
         <div class="modal-body">
             <div class="row">
-                <div class="col">
+                <div class="col-4">
                     <img class="img-fluid round" src="{{profile.avatar.url}}">
                 </div>
                 <div class="col">          
-                    <p>Prvoide some additional/newest info about you</p>
+                    <p>Update information about you</p>
                     {% csrf_token %}
-                    {{form.as_p}}
+                    {{ form | crispy }}
                 </div>
             </div>
         </div>
@@ -38,16 +39,12 @@ My Profile
     <div class="alert alert-success my-3" role="alert">Updated</div>
 {% endif %}
 
-<h3>my profile: {{request.user}}</h3>
 <div class="row">
-    <div class="col-sm-4">
+    <div class="col-sm-4 p-3">
         <img class="img-fluid rounded" src={{profile.avatar.url}}>
-        <div class="d-grid gap-2">
-            <button class='btn btn-secondary btn-lg' type="button" id='modal-btn' data-bs-toggle="modal"
-            data-bs-target = "#updateProfile">Update your profile</button>
-        </div>
     </div>
-    <div class="col-sm-8">
+    <div class="col-sm-8 p-3">
+            <h3>My Profile:</h3>
             <table class="table table-striped">
                 <tbody>
                     <tr>
@@ -93,9 +90,12 @@ My Profile
                         <td>{{profile.get_likes_received_no}}</td>
                     </tr>
 
-                    
                 </tbody>
             </table>
+            <div class="d-grid gap-2">
+            <button class='btn btn-primary bwidth-xxl' type="button" id='modal-btn' data-bs-toggle="modal"
+            data-bs-target = "#updateProfile">Update Profile</button>
+            </div>
     </div>
 </div>
 
