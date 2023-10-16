@@ -22,7 +22,7 @@ class Post(models.Model):
         return self.comment_set.all().count()
 
     class Meta():
-        ordering = ("-updated",)
+        ordering = ("-created",)
     
 class Comment(models.Model):
     user = models.ForeignKey(Profile, on_delete=models.CASCADE)
